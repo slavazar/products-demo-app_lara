@@ -77,7 +77,10 @@ class AuthController extends Controller
     // Current user endpoint
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        return response()->json([
+            'user' => $request->user(),
+            'message' => 'Current user data',
+        ]);
     }
 
     public function login_return_token(Request $request)

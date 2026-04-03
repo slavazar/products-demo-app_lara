@@ -9,6 +9,8 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-Route::get('/auth/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::get('/auth/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
+
+//Route::middleware() ->group(function () {
+    // Protected routes go here
+//});
