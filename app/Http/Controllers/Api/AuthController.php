@@ -24,11 +24,18 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        if (empty($user)) {
+            return response()->json([
+                'user' => null,
+                'message' => 'Invalid registration'
+            ], 401);
+        }
+
         Auth::login($user);
 
         return response()->json([
-            'message' => 'Registered successfully',
-            'user' => $user
+            'user' => $user,
+            'message' => 'Registered successfully'
         ]);
     }
 
@@ -41,6 +48,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
+                'user' => null,
                 'message' => 'Invalid credentials'
             ], 401);
         }
@@ -48,8 +56,8 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return response()->json([
-            'message' => 'Logged in',
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'message' => 'Logged in'
         ]);
     }
 
@@ -61,6 +69,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return response()->json([
+            'user' => null,
             'message' => 'Logged out'
         ]);
     }
