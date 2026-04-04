@@ -54,7 +54,7 @@ class ProductController extends Controller
             $query->orderBy($sortBy, $sortDirection);
         }
 
-        $products = $query->paginate($request->input('per_page', 15));
+        $products = $query->paginate($request->input('per_page', 5));
 
         return response()->json([
             'data' => $products,
