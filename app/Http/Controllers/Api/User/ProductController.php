@@ -77,7 +77,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0|max:999999.99',
             'category_id' => [
-                //'nullable',
+                'required',
                 'integer',
                 Rule::exists(ProductCategory::class, 'id')->where(function ($query) use ($user) {
                     $query->where('user_id', $user->id);
@@ -184,7 +184,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0|max:999999.99',
             'category_id' => [
-                //'nullable',
+                'required',
                 'integer',
                 Rule::exists(ProductCategory::class, 'id')->where(function ($query) use ($product) {
                     $query->where('user_id', $product->user_id);
