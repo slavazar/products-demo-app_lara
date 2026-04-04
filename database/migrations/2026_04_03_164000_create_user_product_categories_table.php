@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_product_categories', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->bigInteger('user_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('sort_order')->default(0);

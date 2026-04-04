@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_products', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id'); // Index for faster lookups
-            $table->integer('category_id')->nullable(); // Optional relation to user_product_categories
+            $table->bigInteger('user_id');
+            $table->bigInteger('category_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
