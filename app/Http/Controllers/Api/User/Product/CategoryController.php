@@ -96,8 +96,17 @@ class CategoryController extends Controller
     /**
      * Display the specified category.
      */
-    public function show(ProductCategory $productCategory): JsonResponse
+    public function show(int $id): JsonResponse
     {
+        $productCategory = ProductCategory::find($id);
+
+        if (!$productCategory) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product category not found',
+            ], 404);
+        }
+
         if ($productCategory->user_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
@@ -116,8 +125,17 @@ class CategoryController extends Controller
     /**
      * Update the specified category.
      */
-    public function update(Request $request, ProductCategory $productCategory): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
+        $productCategory = ProductCategory::find($id);
+
+        if (!$productCategory) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product category not found',
+            ], 404);
+        }
+
         if ($productCategory->user_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
@@ -157,8 +175,17 @@ class CategoryController extends Controller
     /**
      * Remove the specified category.
      */
-    public function destroy(ProductCategory $productCategory): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
+        $productCategory = ProductCategory::find($id);
+
+        if (!$productCategory) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product category not found',
+            ], 404);
+        }
+
         if ($productCategory->user_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
