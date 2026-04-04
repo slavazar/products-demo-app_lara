@@ -9,6 +9,8 @@ use App\Models\User\Product;
 
 class Image extends Model
 {
+    protected $table = 'user_product_images'; // Specify the table name if it doesn't follow Laravel's naming convention
+    
     protected $fillable = [
         'product_id',
         'image_path',
@@ -25,6 +27,21 @@ class Image extends Model
         'is_primary' => 'boolean',
         'metadata' => 'array',
     ];
+
+    /**
+     * Delete the image file when the model is deleted.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($image) {
+            // Delete the actual file from storage
+            if (Storage::exists($image->image_path)) {
+                Storage::delete($image->image_path);
+            }
+        });
+    }
 
     /**
      * Get the product that owns the image.
@@ -77,20 +94,5 @@ class Image extends Model
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order')->orderBy('created_at');
-    }
-
-    /**
-     * Delete the image file when the model is deleted.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($image) {
-            // Delete the actual file from storage
-            if (Storage::exists($image->image_path)) {
-                Storage::delete($image->image_path);
-            }
-        });
     }
 }

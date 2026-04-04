@@ -10,6 +10,8 @@ use App\Models\User\Product\Image as ProductImage;
 
 class Product extends Model
 {
+    protected $table = 'user_products'; // Specify the table name if it doesn't follow Laravel's naming convention
+    
     protected $fillable = [
         'user_id',
         'name',

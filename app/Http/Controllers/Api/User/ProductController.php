@@ -46,19 +46,20 @@ class ProductController extends Controller
         }
 
         // Sort options
-        $sortBy = $request->get('sort_by', 'created_at');
-        $sortDirection = $request->get('sort_direction', 'desc');
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortDirection = $request->input('sort_direction', 'desc');
 
         $allowedSortFields = ['name', 'price', 'created_at', 'updated_at', 'status'];
         if (in_array($sortBy, $allowedSortFields)) {
             $query->orderBy($sortBy, $sortDirection);
         }
 
-        $products = $query->paginate($request->get('per_page', 15));
+        $products = $query->paginate($request->input('per_page', 15));
 
         return response()->json([
-            'success' => true,
             'data' => $products,
+            'message' => 'User products',
+            'success' => true,
         ]);
     }
 
