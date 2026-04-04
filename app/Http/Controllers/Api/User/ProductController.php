@@ -27,7 +27,7 @@ class ProductController extends Controller
             }]);
 
         // Filter by status if provided
-        if ($request->has('status') && $request->status !== 'all') {
+        if ($request->has('status') && !empty($request->status)) {
             $query->where('status', $request->status);
         }
 
