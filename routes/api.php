@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('products', ProductController::class);
     Route::apiResource('product/categories', ProductCategoryController::class);
 
+    Route::get('product/category/list', [ProductCategoryController::class, 'list'])
+        ->name('api.product.categories.list');
+
     // Additional product image routes
     Route::delete('products/{product}/images/{image}', [ProductController::class, 'deleteImage']);
     Route::patch('products/{product}/images/order', [ProductController::class, 'updateImageOrder']);

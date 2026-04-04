@@ -23,6 +23,7 @@ class ProductController extends Controller
         $user = Auth::user();
 
         $query = Product::where('user_id', $user->id)
+            ->with('category')
             ->with(['images' => function ($query) {
                 $query->ordered();
             }]);
@@ -125,8 +126,17 @@ class ProductController extends Controller
     /**
      * Display the specified product.
      */
-    public function show(Product $product): JsonResponse
+    public function show(int $id): JsonResponse
     {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found',
+            ], 404);
+        }
+
         // Check if the product belongs to the authenticated user
         if ($product->user_id !== Auth::id()) {
             return response()->json([
@@ -134,6 +144,8 @@ class ProductController extends Controller
                 'message' => 'Unauthorized',
             ], 403);
         }
+
+        $product->load('category');
 
         $product->load(['images' => function ($query) {
             $query->ordered();
@@ -148,8 +160,17 @@ class ProductController extends Controller
     /**
      * Update the specified product.
      */
-    public function update(Request $request, Product $product): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found',
+            ], 404);
+        }
+
         // Check if the product belongs to the authenticated user
         if ($product->user_id !== Auth::id()) {
             return response()->json([
@@ -206,8 +227,17 @@ class ProductController extends Controller
     /**
      * Remove the specified product.
      */
-    public function destroy(Product $product): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found',
+            ], 404);
+        }
+
         // Check if the product belongs to the authenticated user
         if ($product->user_id !== Auth::id()) {
             return response()->json([

@@ -213,4 +213,26 @@ class CategoryController extends Controller
             'message' => 'Product category deleted successfully',
         ]);
     }
+
+    public function list(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+
+        $query = ProductCategory::query()
+            ->where('user_id', $user->id);
+
+        $sortBy = 'sort_order';
+        $sortDirection = 'asc';
+
+        $query->orderBy($sortBy, $sortDirection);
+
+        $categories = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User product category list',
+            'data' => $categories,
+        ]);
+    }
+
 }
