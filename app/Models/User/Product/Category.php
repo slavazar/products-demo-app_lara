@@ -19,6 +19,10 @@ class Category extends Model
         'sort_order',
     ];
 
+    protected $casts = [
+        'sort_order' => 'integer',
+    ];
+
     /**
      * Get the user that owns the category.
      */

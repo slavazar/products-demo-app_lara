@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -144,7 +145,17 @@ class CategoryController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|required|string|max:255|unique:user_product_categories,name,' . $productCategory->id . ',id,user_id,' . $productCategory->user_id,
+            'name' => [
+                //'sometimes',
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('user_product_categories', 'name')
+                    ->ignore($productCategory->id)
+                    ->where(function ($query) use ($productCategory) {
+                        $query->where('user_id', $productCategory->user_id);
+                    }),
+            ],
             'description' => 'nullable|string',
             'sort_order' => 'sometimes|required|integer|min:0',
         ]);
