@@ -14,18 +14,18 @@ return new class extends Migration
         Schema::create('user_products', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id'); // Index for faster lookups
+            $table->integer('category_id')->nullable(); // Optional relation to user_product_categories
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->string('category')->nullable();
             $table->enum('status', ['active', 'inactive', 'draft'])->default('active');
             $table->integer('stock_quantity')->default(0);
             $table->timestamps();
 
             // Indexes
             $table->index('user_id');
+            $table->index('category_id');
             $table->index(['user_id', 'status']);
-            $table->index('category');
         });
     }
 

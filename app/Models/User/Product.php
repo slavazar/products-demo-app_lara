@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\User;
 use App\Models\User\Product\Image as ProductImage;
+use App\Models\User\Product\Category as ProductCategory;
 
 class Product extends Model
 {
@@ -14,10 +15,10 @@ class Product extends Model
     
     protected $fillable = [
         'user_id',
+        'category_id',
         'name',
         'description',
         'price',
-        'category',
         'status',
         'stock_quantity',
     ];
@@ -32,6 +33,14 @@ class Product extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the category assigned to the product.
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
     /**

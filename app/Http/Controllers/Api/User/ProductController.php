@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User\Product;
+use App\Models\User\Product\Category as ProductCategory;
 use App\Models\User\Product\Image as ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -32,8 +33,8 @@ class ProductController extends Controller
         }
 
         // Filter by category if provided
-        if ($request->has('category') && !empty($request->category)) {
-            $query->where('category', $request->category);
+        if ($request->has('category_id') && !empty($request->category_id)) {
+            $query->where('category_id', $request->category_id);
         }
 
         // Search by name or description
@@ -68,11 +69,19 @@ class ProductController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $user = Auth::user();
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0|max:999999.99',
-            'category' => 'nullable|string|max:100',
+            'category_id' => [
+                //'nullable',
+                'integer',
+                Rule::exists(ProductCategory::class, 'id')->where(function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }),
+            ],
             'status' => ['required', Rule::in(['active', 'inactive', 'draft'])],
             'stock_quantity' => 'required|integer|min:0',
             'images' => 'nullable|array',
@@ -87,14 +96,12 @@ class ProductController extends Controller
             ], 422);
         }
 
-        $user = Auth::user();
-
         $product = Product::create([
             'user_id' => $user->id,
+            'category_id' => $request->category_id,
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'category' => $request->category,
             'status' => $request->status,
             'stock_quantity' => $request->stock_quantity,
         ]);
@@ -155,7 +162,13 @@ class ProductController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0|max:999999.99',
-            'category' => 'nullable|string|max:100',
+            'category_id' => [
+                //'nullable',
+                'integer',
+                Rule::exists(ProductCategory::class, 'id')->where(function ($query) use ($product) {
+                    $query->where('user_id', $product->user_id);
+                }),
+            ],
             'status' => ['sometimes', 'required', Rule::in(['active', 'inactive', 'draft'])],
             'stock_quantity' => 'sometimes|required|integer|min:0',
             'images' => 'nullable|array',
@@ -171,7 +184,7 @@ class ProductController extends Controller
         }
 
         $product->update($request->only([
-            'name', 'description', 'price', 'category', 'status', 'stock_quantity'
+            'name', 'description', 'price', 'category_id', 'status', 'stock_quantity'
         ]));
 
         // Handle image uploads
@@ -291,7 +304,7 @@ class ProductController extends Controller
 
         $validator = Validator::make($request->all(), [
             'images' => 'required|array',
-            'images.*.id' => 'required|integer|exists:product_images,id',
+            'images.*.id' => 'required|integer|exists:user_product_images,id',
             'images.*.sort_order' => 'required|integer|min:0',
         ]);
 
@@ -329,7 +342,7 @@ class ProductController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'image_id' => 'required|integer|exists:product_images,id',
+            'image_id' => 'required|integer|exists:user_product_images,id',
         ]);
 
         if ($validator->fails()) {
