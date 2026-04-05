@@ -43,7 +43,7 @@ class ProductController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -205,7 +205,12 @@ class ProductController extends Controller
         }
 
         $product->update($request->only([
-            'name', 'description', 'price', 'category_id', 'status', 'stock_quantity'
+            'name',
+            'description',
+            'price',
+            'category_id',
+            'status',
+            'stock_quantity'
         ]));
 
         // Handle image uploads
