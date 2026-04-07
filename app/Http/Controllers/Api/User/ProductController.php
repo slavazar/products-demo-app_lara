@@ -92,6 +92,14 @@ class ProductController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:' . env('APP_MAX_UPLOAD_IMAGE_SIZE', self::MAX_UPLOAD_IMAGE_SIZE),
         ], [
             'images.max' => 'A product can have no more than ' . env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES) . ' images.',
+            'images.*.image' => 'Each product image must be a valid image file.',
+            'images.*.mimes' => 'Each product image must be a file of type: jpeg, png, jpg, gif, webp.',
+            'images.*.max' => 'Each product image must not be greater than ' . env('APP_MAX_UPLOAD_IMAGE_SIZE', self::MAX_UPLOAD_IMAGE_SIZE) . ' KB.',
+        ]);
+
+        $validator->setAttributeNames([
+            'images' => 'images',
+            'images.*' => 'product image',
         ]);
 
         if ($validator->fails()) {
@@ -201,6 +209,14 @@ class ProductController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:' . env('APP_MAX_UPLOAD_IMAGE_SIZE', self::MAX_UPLOAD_IMAGE_SIZE),
         ], [
             'images.max' => 'A product can have no more than ' . env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES) . ' images.',
+            'images.*.image' => 'Each product image must be a valid image file.',
+            'images.*.mimes' => 'Each product image must be a file of type: jpeg, png, jpg, gif, webp.',
+            'images.*.max' => 'Each product image must not be greater than ' . env('APP_MAX_UPLOAD_IMAGE_SIZE', self::MAX_UPLOAD_IMAGE_SIZE) . ' KB.',
+        ]);
+
+        $validator->setAttributeNames([
+            'images' => 'images',
+            'images.*' => 'product image',
         ]);
 
         $validator->after(function ($validator) use ($request, $product) {
