@@ -15,6 +15,9 @@ use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
+    protected const MAX_PRODUCT_IMAGES = 3; // Default max images, can be overridden by .env setting
+    protected const MAX_UPLOAD_IMAGE_SIZE = 100; // 100 KB, can be overridden by .env setting
+
     /**
      * Display a listing of the user's products.
      */
@@ -85,8 +88,10 @@ class ProductController extends Controller
             ],
             'status' => ['required', Rule::in(['active', 'inactive', 'draft'])],
             'stock_quantity' => 'required|integer|min:0',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB max
+            'images' => 'nullable|array|max:' . env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES),
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:' . env('APP_MAX_UPLOAD_IMAGE_SIZE', self::MAX_UPLOAD_IMAGE_SIZE),
+        ], [
+            'images.max' => 'A product can have no more than ' . env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES) . ' images.',
         ]);
 
         if ($validator->fails()) {
@@ -192,9 +197,20 @@ class ProductController extends Controller
             ],
             'status' => ['sometimes', 'required', Rule::in(['active', 'inactive', 'draft'])],
             'stock_quantity' => 'sometimes|required|integer|min:0',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB max
+            'images' => 'nullable|array|max:' .  env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES),
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:' . env('APP_MAX_UPLOAD_IMAGE_SIZE', self::MAX_UPLOAD_IMAGE_SIZE),
+        ], [
+            'images.max' => 'A product can have no more than ' . env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES) . ' images.',
         ]);
+
+        $validator->after(function ($validator) use ($request, $product) {
+            $uploadedImagesCount = count($request->file('images', []));
+            $totalImagesCount = $product->images()->count() + $uploadedImagesCount;
+
+            if ($totalImagesCount > env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES)) {
+                $validator->errors()->add('images', 'A product can have no more than ' . env('APP_MAX_PRODUCT_IMAGES', self::MAX_PRODUCT_IMAGES) . ' images.');
+            }
+        });
 
         if ($validator->fails()) {
             return response()->json([
