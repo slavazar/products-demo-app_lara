@@ -1,58 +1,209 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Products Demo App - Laravel Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A robust backend API for managing products, users, and related data. Built with Laravel 11, featuring modern PHP practices, RESTful API design, and comprehensive testing capabilities.
 
-## About Laravel
+## 🚀 Technologies Used
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Laravel 11** - Modern PHP web application framework
+- **PHP 8.2+** - Latest version of PHP with strong typing support
+- **MySQL/MariaDB** - Relational database management
+- **Eloquent ORM** - Powerful and intuitive database abstraction layer
+- **Laravel Sanctum** - Token-based API authentication
+- **Pest PHP** - Modern, elegant testing framework
+- **Composer** - PHP package manager
+- **Artisan CLI** - Laravel's command-line interface
+- **Database Migrations** - Version control for your database schema
+- **Laravel Seeders** - Database seeding for demo data
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2 or higher
+- Composer (dependency manager)
+- MySQL 8.0+ or MariaDB 10.3+
+- Node.js v18+ (for frontend asset compilation)
 
-## Learning Laravel
+## 🛠️ Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Clone and Setup
 ```bash
-composer require laravel/boost --dev
+# Install PHP dependencies
+composer install
 
-php artisan boost:install
+# Copy environment file
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Database Configuration
 
-## Contributing
+Update your `.env` file with database credentials:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=products_demo
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Database Setup
+```bash
+# Run migrations
+php artisan migrate
 
-## Code of Conduct
+# Seed demo data
+php artisan db:seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🏃 Development Commands
 
-## Security Vulnerabilities
+Start development server:
+```bash
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Run tests:
+```bash
+php artisan test
+```
 
-## License
+Run specific test file:
+```bash
+php artisan test tests/Feature/YourTestFile.php
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Generate cache for better performance:
+```bash
+php artisan optimize
+```
+
+Clear all caches:
+```bash
+php artisan cache:clear
+```
+
+## 📁 Project Structure
+
+```
+app/
+├── Http/
+│   ├── Controllers/    # API controllers
+│   └── Requests/       # Form request validation
+├── Models/             # Eloquent models
+│   ├── User.php
+│   ├── Product.php
+│   └── ...
+└── Providers/          # Service providers
+
+database/
+├── migrations/         # Database schema migrations
+├── factories/          # Model factories for testing
+└── seeders/           # Database seeders
+
+routes/
+├── api.php            # API routes
+├── web.php            # Web routes
+└── console.php        # Console commands
+
+tests/
+├── Feature/           # Feature tests
+├── Unit/              # Unit tests
+└── TestCase.php       # Base test class
+
+config/                # Configuration files
+storage/               # Logs, uploads, caches
+```
+
+## 🔌 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `GET /api/user` - Get authenticated user
+
+### Products
+- `GET /api/products` - List all products
+- `POST /api/products` - Create new product
+- `GET /api/products/{id}` - Get product details
+- `PUT /api/products/{id}` - Update product
+- `DELETE /api/products/{id}` - Delete product
+
+### Product Categories
+- `GET /api/categories` - List categories
+- `POST /api/categories` - Create category
+
+## 🧪 Testing
+
+The project uses Pest for testing with comprehensive test coverage:
+
+```bash
+# Run all tests
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+
+# Run specific test suite
+php artisan test tests/Feature
+```
+
+## 🔐 Security
+
+- Uses Laravel Sanctum for API authentication
+- CORS configured in `config/cors.php`
+- Environment variables for sensitive data
+- SQL injection prevention with Eloquent ORM
+- Validation on all user inputs
+
+## 📚 Key Features
+
+- RESTful API design
+- Comprehensive error handling
+- Request validation
+- Database migrations for version control
+- Seeder factories for testing data
+- Eloquent relationships
+- Authentication & authorization
+- Rate limiting (configurable)
+- CORS support
+
+## 🔄 Database Schema
+
+The application manages:
+- **Users** - User accounts and profiles
+- **Products** - Product listings and details
+- **Product Categories** - Product categorization
+- **Product Images** - Images associated with products
+- **Personal Access Tokens** - API authentication tokens
+
+## 🚀 Deployment
+
+### Production Build
+```bash
+# Install production dependencies
+composer install --no-dev --optimize-autoloader
+
+# Optimize application
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+## 📖 Additional Resources
+
+- [Laravel Documentation](https://laravel.com/docs)
+- [Eloquent ORM](https://laravel.com/docs/eloquent)
+- [Laravel API Authentication](https://laravel.com/docs/sanctum)
+- [Pest Documentation](https://pestphp.com)
+
+## 🤝 Contributing
+
+Follow Laravel conventions and ensure all tests pass before submitting changes.
+
+## 📄 License
+
+This project is part of the Products Demo Application suite.
