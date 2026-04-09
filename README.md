@@ -4,7 +4,7 @@ A robust backend API for managing products, users, and related data. Built with 
 
 ## 🚀 Technologies Used
 
-- **Laravel 11** - Modern PHP web application framework
+- **Laravel 11+** - Modern PHP web application framework
 - **PHP 8.2+** - Latest version of PHP with strong typing support
 - **MySQL/MariaDB** - Relational database management
 - **Eloquent ORM** - Powerful and intuitive database abstraction layer
