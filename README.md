@@ -2,6 +2,10 @@
 
 A robust backend API for managing products, users, and related data. Built with Laravel 11, featuring modern PHP practices, RESTful API design, and comprehensive testing capabilities.
 
+## 🌐 Demo Site
+
+The live demo application is available at: **[http://products-demo.prowebagency.top/](http://products-demo.prowebagency.top/)**
+
 ## 🚀 Technologies Used
 
 - **Laravel 11+** - Modern PHP web application framework
