@@ -27,3 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('products/{product}/images/order', [ProductController::class, 'updateImageOrder']);
     Route::patch('products/{product}/images/primary', [ProductController::class, 'setPrimaryImage']);
 });
+
+/*
+Route::fallback(function () {
+    return response()->json(['message' => 'Resource not found.'], 404);
+});
+*/
+
